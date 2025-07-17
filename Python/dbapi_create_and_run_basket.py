@@ -35,6 +35,7 @@ basket_id = basket['basketId']
 basket_name = basket['basketName']
 print(f'created basket at : https://www.economy.com/databuffet/preview/basket/{basket_id}')
 
+
 # Run the basket
 api.add_series_to_basket(basket_id,series_list)
 order = api.run_basket(basket_id)

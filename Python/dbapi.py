@@ -319,7 +319,7 @@ class DataBuffetAPI(BaseAPI):
                     f.write(basket_data)    
             return basket_data
     
-    def _basket_option_payload(self, title:str=None, filetype=None, decimals:int=None, start:str=None, end:str=None, date_option=None, frequency=None):
+    def _basket_option_payload(self, title:str=None, filetype=None, decimals:int=None, start:str=None, end:str=None, date_option=None, frequency=None, vintage:str=None, vintage_version:int=None):
         ret = {}
         ret['options'] = {}
         if title is not None:
@@ -351,18 +351,22 @@ class DataBuffetAPI(BaseAPI):
             ret['dateStart'] = start
         if end is not None:
             ret['dateEnd'] = end
+        if vintage is not None:
+            ret['vintage'] = vintage.upper().strip()
+        if vintage_version is not None:
+            ret['vintageVersion'] = vintage_version
         return ret
 
-    def create_basket(self, title:str, filetype=None, decimals:int=None, start:str=None, end:str=None, date_option=None, frequency=None):
+    def create_basket(self, title:str, filetype=None, decimals:int=None, start:str=None, end:str=None, date_option=None, frequency=None, vintage:str=None, vintage_version:int=None):
         url = f'{self._base_uri}/baskets'
-        pl = self._basket_option_payload(title,filetype)
+        pl = self._basket_option_payload(title, filetype, decimals, start, end, date_option, frequency, vintage, vintage_version)
         ret = self.request(url=url,method="post",payload=pl)
-        out = self.edit_basket_settings(basket_id=ret['basketId'],decimals=decimals,start=start,end=end,date_option=date_option,frequency=frequency)
+        out = self.edit_basket_settings(basket_id=ret['basketId'], decimals=decimals, start=start, end=end, date_option=date_option, frequency=frequency, vintage=vintage, vintage_version=vintage_version)
         return ret
     
-    def edit_basket_settings(self, basket_id:str, title:str=None, filetype=None, decimals:int=None, start:str=None, end:str=None, date_option=None, frequency=None):
+    def edit_basket_settings(self, basket_id:str, title:str=None, filetype=None, decimals:int=None, start:str=None, end:str=None, date_option=None, frequency=None, vintage:str=None, vintage_version:int=None):
         url = f'{self._base_uri}/baskets/{basket_id}'
-        pl = self._basket_option_payload(title,filetype,decimals,start,end,date_option,frequency)
+        pl = self._basket_option_payload(title, filetype, decimals, start, end, date_option, frequency, vintage, vintage_version)
         ret = self.request(url=url,method="post",payload=pl)
         return ret
 
